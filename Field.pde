@@ -1,15 +1,32 @@
 public class Field{
+  private Bot[] players;
   private int[] grid;
   private int[] scoreboard, powerups, queue, boxes; //left is red, r is blue||
   private String[] states; //left switch, scale, right switch
   private int powerupTimer;
-  public Field(int time) {
+  public Field(int time, int players) {
+    this.players = new Bot[players];
     boxes = new int[6]; //0red left, 1 blue left,2 red scale, 3 blue scale...
-    scoreboard = new int[3];scoreboard[2] = time; //red score, blue score, time
+    scoreboard = new int[3];scoreboard[0]=0;scoreboard[1]=0;scoreboard[2] = time;//red score, blue score, time
     states = new String [3];
     powerups = new int[6]; //levels from 0 to 3, red force, boost, levitate, blue force, boost, levitate
     queue = new int[6];//1 for currently active powerup, assign sequential numbers afteward
   }
+  
+  public void initialize(){
+    Bot redA = new Bot(0,0,50,"red");
+    Bot redB = new Bot(0,178,50,"red");
+    Bot redC = new Bot(0,356,50,"red");
+    
+    Bot blueA = new Bot(1010,0,50,"blue");
+    Bot blueB = new Bot(1010,178,50,"blue");
+    Bot blueC = new Bot(1010,356,50,"blue");
+  }
+  
+  public int getTimer(){
+    return scoreboard[2];
+  }
+  
   
   //Shifts the queue (to be used after the powerup timer reaches 0)
   public void rotateQueue() { //shifts the queue

@@ -1,16 +1,18 @@
 void setup(){
   size(1060,534);
   background(169,169,169);
-  
-  final int OUTER_SWITCH_W=92,OUTER_SWITCH_H=68;
-  final int INNER_SWITCH_W=84,INNER_SWITCH_H=60;
+}
 
-  final int SCALE_WIDTH=80,SCALE_HEIGHT=60;
+final int OUTER_SWITCH_W=92,OUTER_SWITCH_H=68;
+final int INNER_SWITCH_W=84,INNER_SWITCH_H=60;
 
-  final int BOX_SIZE=20;
-  int[] boxPosX = new int[24];
-  int[] boxPosY = new int[24];
-  
+final int SCALE_WIDTH=80,SCALE_HEIGHT=60;
+
+final int BOX_SIZE=20;
+int[] boxPosX = new int[24];
+int[] boxPosY = new int[24];
+
+void draw(){
   //Platforms  
   fill(256,0,0);
   rect(426,156,104,222);
@@ -72,19 +74,24 @@ void setup(){
     rect(boxPosX[i],boxPosY[i],BOX_SIZE,BOX_SIZE);
   }
   noFill();
-}
-
-
-void draw(){
-  Bot redA = new Bot(100,100,46,"red");
-  Bot blueA = new Bot(900,100,46  ,"blue");
-  redA.show();
-  blueA.show();
+  
+  
   //Bots
-  Field field = new Field(300,6);
-  while (field.getTimer()>0){
-    redA.show();
-  }
+  Bot redA = new Bot(0,0,50,"red");
+  Bot redB = new Bot(0,178,50,"red");
+  Bot redC = new Bot(0,356,50,"red");
+  redA.show();
+  redB.show();
+  redC.show();
+  
+  Bot blueA = new Bot(1000,0,50,"blue");
+  Bot blueB = new Bot(1000,178,50,"blue");
+  Bot blueC = new Bot(1000,356,50,"blue");
+  blueA.show();
+  blueB.show();
+  blueC.show();
+  
+  Field field = new Field(300);
   
   
   
