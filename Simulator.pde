@@ -2,15 +2,19 @@ void setup(){
   size(1060,534);
   background(169,169,169);
   
-  final int OUTER_SWITCH_W=92,OUTER_SWITCH_H=68;
-  final int INNER_SWITCH_W=84,INNER_SWITCH_H=60;
+}
 
-  final int SCALE_WIDTH=80,SCALE_HEIGHT=60;
+final int OUTER_SWITCH_W=92,OUTER_SWITCH_H=68;
+final int INNER_SWITCH_W=84,INNER_SWITCH_H=60;
 
-  final int BOX_SIZE=20;
-  int[] boxPosX = new int[24];
-  int[] boxPosY = new int[24];
-  
+final int SCALE_WIDTH=80,SCALE_HEIGHT=60;
+
+final int BOX_SIZE=20;
+
+boolean keyLeft = false, keyRight = false, movingForward = false;
+
+void draw(){
+  background(169,169,169);
   //Platforms  
   fill(256,0,0);
   rect(426,156,104,222);
@@ -44,53 +48,34 @@ void setup(){
   rect(490,120,SCALE_WIDTH,SCALE_HEIGHT);
   rect(490,354,SCALE_WIDTH,SCALE_HEIGHT);
   
-  //Boxes
-  boxPosY[0] = 257;boxPosY[1] = 247;boxPosY[2] = 267;
-  boxPosY[3] = 237;boxPosY[4] = 257;boxPosY[5] = 277; 
-  boxPosY[6] = (int)(144+45.2*(0));boxPosY[7] = (int)(144+45.2*(1));
-  boxPosY[8] = (int)(144+45.2*(2));boxPosY[9] = (int)(144+45.2*(3));
-  boxPosY[10] = (int)(144+45.2*(4));boxPosY[11] = (int)(144+45.2*(5));
-  boxPosY[12] = boxPosY[6];boxPosY[13] = boxPosY[7];boxPosY[14] = boxPosY[8];
-  boxPosY[15] = boxPosY[9];boxPosY[16] = boxPosY[10];boxPosY[17] = boxPosY[11];
-  boxPosY[18] = boxPosY[3];boxPosY[19] = boxPosY[4];boxPosY[20] = boxPosY[5];
-  boxPosY[21] = boxPosY[1];boxPosY[22] = boxPosY[2];boxPosY[23] = boxPosY[0];
-
-  boxPosX[0] = 168;boxPosX[1] = 188;boxPosX[2] = 188;
-  boxPosX[3] = 208;boxPosX[4] = 208;boxPosX[5] = 208;
-  boxPosX[6] = 320;boxPosX[7] = 320;boxPosX[8] = 320;
-  boxPosX[9] = 320;boxPosX[10] = 320;boxPosX[11] = 320;
-  boxPosX[12] = 1040-boxPosX[6];boxPosX[13] = 1040-boxPosX[7];
-  boxPosX[14] = 1040-boxPosX[8];boxPosX[15] = 1040-boxPosX[9];
-  boxPosX[16] = 1040-boxPosX[10];boxPosX[17] = 1040-boxPosX[11];
-  boxPosX[18] = 1040-boxPosX[3];boxPosX[19] = 1040-boxPosX[4];
-  boxPosX[20] = 1040-boxPosX[5];boxPosX[21] = 1040-boxPosX[1];
-  boxPosX[22] = 1040-boxPosX[2];boxPosX[23] = 1040-boxPosX[0];
-  
   
   fill(256,256,0);
   for(int i=0;i<24;i++){
-    rect(boxPosX[i],boxPosY[i],BOX_SIZE,BOX_SIZE);
+    rect(field.boxes[i].getBoxPosX(),field.boxes[i].getBoxPosY(),BOX_SIZE,BOX_SIZE);
   }
   noFill();
-}
-
-
-void draw(){
-  Bot redA = new Bot(100,100,46,"red");
-  Bot blueA = new Bot(900,100,46  ,"blue");
-  redA.show();
-  blueA.show();
-  //Bots
-  Field field = new Field(300,6);
-  while (field.getTimer()>0){
-    redA.show();
+  
+  
+  if (keyLeft) field.players[0].turnLeft();
+  if (keyRight) field.players[0].turnRight();
+  if (movingForward) field.players[0].changeMoving(1);
+  else field.players[0].changeMoving(0);
+  
+  field.show();  
+  for(int i=0;i<6;i++){
+    field.players[i].move();
   }
+  //Collision Logic
   
   
-  
-  
-  
-  
-  
-  
+}
+void keyPressed(){
+  if(keyCode == LEFT) keyLeft = true;
+  if(keyCode == RIGHT) keyRight = true;
+  if(keyCode == UP) movingForward = true;
+  if(keyCode == DOWN) movingForward = false;
+}
+void keyReleased(){
+  if(keyCode == LEFT) keyLeft = false;
+  if(keyCode == RIGHT) keyRight = false;
 }
