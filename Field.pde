@@ -174,7 +174,8 @@ class Field {
 
 //x = (rad(5)/2) * l * cos(θ-26.565)        y = (rad(5)/2) * l * sin(θ-26.565)
   public void checkCollision() {    
-    float r = pow(5,0.5) * 0.5;
+    float r1 = pow(5,0.5) * 0.5;
+    float r2 = pow(2,0.5);
     boolean stateChanged = false;
     for (int i=0; i<6; i++) {//runs through each player
       //Front collisions
@@ -183,13 +184,18 @@ class Field {
       float direction = players[i].getDir();
       for (int j=0;j<2;j++){ //10 block collision check
         //checks y then checks x
-        if( (grid[ (int)(markerIndex[1] +  r * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r * size * cos(radians(26.565)-direction)) + j]==0) ||
-            (grid[ (int)(markerIndex[1] +  r * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r * size * cos(radians(26.565)-direction)) + j]==13)||
-            (grid[ (int)(markerIndex[1] +  r * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r * size * cos(radians(26.565)-direction)) + j]==14)) {players[i].canMove[0] = true;stateChanged = true;}
-        
+        if( (grid[ (int)(markerIndex[1] +  r1 * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r1 * size * cos(radians(26.565)-direction)) + j]!=0) &&
+            (grid[ (int)(markerIndex[1] +  r1 * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r1 * size * cos(radians(26.565)-direction)) + j]!=13)&&
+            (grid[ (int)(markerIndex[1] +  r1 * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r1 * size * cos(radians(26.565)-direction)) + j]!=14)) {players[i].canMove[0] = false;stateChanged = true;}
+        if( (grid[ (int)(markerIndex[1] +  r2 * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r2 * size * cos(radians(26.565)-direction)) + j]!=0) &&
+            (grid[ (int)(markerIndex[1] +  r2 * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r2 * size * cos(radians(26.565)-direction)) + j]!=13)&&
+            (grid[ (int)(markerIndex[1] +  r2 * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r2 * size * cos(radians(26.565)-direction)) + j]!=14)) {players[i].canMove[0] = false;stateChanged = true;}
+        if( (grid[ (int)(markerIndex[1] +  size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  size * cos(radians(26.565)-direction)) + j]!=0) &&
+            (grid[ (int)(markerIndex[1] +  size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  size * cos(radians(26.565)-direction)) + j]!=13)&&
+            (grid[ (int)(markerIndex[1] +  size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  size * cos(radians(26.565)-direction)) + j]!=14)) {players[i].canMove[0] = false;stateChanged = true;}
       }
       
-      if (!stateChanged) players[i].canMove[0]=false;
+      if (!stateChanged) players[i].canMove[0]=true;
     }
   }
 

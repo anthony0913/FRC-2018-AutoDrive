@@ -68,8 +68,10 @@ class Bot{
     
     //Direction Arrow
     strokeWeight(2);
-    line(size/2,size/2,(size/2) + 100,(size/2));
+    line(size/2,size/2 -1,(size/2) + 100,(size/2));
     strokeWeight(1);
+    line(size/2,0,(size/2) + 50,0);
+    line(size/2,size,(size/2) + 50,(size));
     noFill();
     
     
