@@ -9,12 +9,13 @@ class Bot{
   
   
   public Bot(int startX, int startY, int size, String team){
+    for(int i=0;i<canMove.length;i++) canMove[i] = true;
     pos[0] = startX;
     pos[1] = startY;
     this.size = size;
     this.team = team;
     if(team=="red") direction = 0;
-    if(team=="blue") direction = HALF_PI;    //-3.141596535)/2.0;
+    if(team=="blue") direction = PI;    //-3.141596535)/2.0;
     speed = 3*(46.0/size);
     
     for(int i=0;i<4;i++) canMove[i] = true;
@@ -80,8 +81,10 @@ class Bot{
   
   //Movement
   public void move(){
-    if (canMove[0]) pos[0]+=cos(-direction)* speed * isMoving;
-    pos[1]+=sin(-direction)* speed * isMoving;
+    if (canMove[0] && isMoving>0) pos[0]+=cos(-direction)* speed * isMoving;
+    else if (canMove[3] && isMoving<0) pos[0]+=cos(-direction)* speed * isMoving;
+    if (canMove[0] && isMoving>0)pos[1]+=sin(-direction)* speed * isMoving;
+    else if (canMove[0] && isMoving<0)pos[1]+=sin(-direction)* speed * isMoving;
   }
   public void changeMoving(int x){
     isMoving = x;

@@ -50,6 +50,14 @@ class Field {
      12 = player
      13 = red platform
      14 = blue platform
+     
+     declaration format
+     for (int i=;i<;i++){
+      for(int j=;j<;j++){
+        grid[i][j] = 
+      }
+    }
+     
      */
     //Field
     
@@ -60,61 +68,56 @@ class Field {
         grid[i][j] = 0;
       }
     }
-
+    //Walls
+    for(int i=0; i< WIDTH;i++){
+      grid[0][i] = 1;
+      grid[1][i] = 1;
+      grid[2][i] = 1;
+      grid[3][i] = 1;
+      grid[4][i] = 1;
+      grid[HEIGHT-5][i] = 1;
+      grid[HEIGHT-4][i] = 1;
+      grid[HEIGHT-3][i] = 1;
+      grid[HEIGHT-2][i] = 1;
+      grid[HEIGHT-1][i] = 1;
+    }
+    
 
 
     //Platforms
-    for (int i=156;i<534-156;i++){ //red plat
-      for(int j=426;j<530;j++){
+    for (int i=156-1;i<534-156-1;i++){ //red plat
+      for(int j=426-1;j<530;j++){
         grid[i][j] = 13;
       }
     }
-    for (int i=156;i<534-156;i++){ //blue plat
-      for(int j=530;j<530+104;j++){
+    for (int i=156-1;i<534-156-1;i++){ //blue plat
+      for(int j=530-1;j<530+104;j++){
         grid[i][j] = 14;
       }
     }
     
-    
-
-    //Left Switch
-    for (int i=;i<;i++){
-      for(int j=;j<;j++){
-        grid[i][j] = 
-      }
-    }
-
-    //Borders
-    for (int i=;i<;i++){
-      for(int j=;j<;j++){
-        grid[i][j] = 
-      }
-    }
-
-
-    //Left Switch
-    for (int i=;i<;i++){
-      for(int j=;j<;j++){
-        grid[i][j] = 
-      }
-    }
-    //Right Switch
-    for (int i=;i<;i++){
-      for(int j=;j<;j++){
-        grid[i][j] = 
-      }
-    }
     //Scale
-    for (int i=;i<;i++){
-      for(int j=;j<;j++){
-        grid[i][j] = 
+    for (int i=120-1;i<534-120-1;i++){
+      for(int j=490+24-1;j<490+24+32-1;j++){
+        grid[i][j] = 1;
+      }
+    }
+    
+    //Left Switch
+    for (int i=144-1;i<534-144-1;i++){
+      for(int j=228-1;j<228+92-1;j++){
+        grid[i][j] = 1;
       }
     }
 
-
-
-
-
+    //Right Switch
+    for (int i=144-1;i<534-144-1;i++){
+      for(int j=1060-92-228-1;j<1060-228-1;j++){
+        grid[i][j] = 1;
+      }
+    }
+    
+    
 
     //Boxes (coordinate of top left corner)
     boxes[0] = new Boxes(168, 257, false);
@@ -161,28 +164,32 @@ class Field {
 
 
   //Utility
-  public int convertCoordinates(Bot player) {//converts Bot position of x and y into an index for grid
-    int coordinates=0;
-    for (int i=0; i<(int)player.getPosY(); i++) {
-      coordinates+=WIDTH;
-    }
-    for (int i=0; i<(int)player.getPosX()-1; i++) {
-      coordinates+=1;
-    }
+  public int[] convertCoordinates(Bot player) {//converts Bot position of x and y into an index for grid
+    int[] coordinates = new int[2]; // x then y coord
+    coordinates[1] = (int)player.getPosY();
+    coordinates[0] = (int)player.getPosX();
     return coordinates;
   }
 
 
 //x = (rad(5)/2) * l * cos(θ-26.565)        y = (rad(5)/2) * l * sin(θ-26.565)
   public void checkCollision() {    
+    float r = pow(5,0.5) * 0.5;
+    boolean stateChanged = false;
     for (int i=0; i<6; i++) {//runs through each player
       //Front collisions
-      int markerIndex = this.convertCoordinates(players[i]);
+      int[] markerIndex = this.convertCoordinates(players[i]);
       int size = players[i].getSize();
       float direction = players[i].getDir();
-      for (int j=0;j<10;j++){ //10 block collision check
-        if( (grid[]) && () )
+      for (int j=0;j<2;j++){ //10 block collision check
+        //checks y then checks x
+        if( (grid[ (int)(markerIndex[1] +  r * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r * size * cos(radians(26.565)-direction)) + j]==0) ||
+            (grid[ (int)(markerIndex[1] +  r * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r * size * cos(radians(26.565)-direction)) + j]==13)||
+            (grid[ (int)(markerIndex[1] +  r * size * sin(radians(26.565)-direction)) ][ (int)(markerIndex[0] +  r * size * cos(radians(26.565)-direction)) + j]==14)) {players[i].canMove[0] = true;stateChanged = true;}
+        
       }
+      
+      if (!stateChanged) players[i].canMove[0]=false;
     }
   }
 
@@ -195,10 +202,26 @@ class Field {
     }
   }
 
+  public void calcBoxes(){//create different types of boxes (free, static x, static y) 
+    int baseX,baseY;
+    for (int i = 0; i<boxes.length;i++){
+      baseX = boxes[i].getBoxPosX();
+      baseY = boxes[i].getBoxPosY();
+      for (int j=0; j<20; j++){
+        for(int k=0;k<20;k++){
+          grid[ baseY + j ][ baseX + k ] = 8;
+        }
+      }
+    }
+  }
 
 
 
 
+
+  //Ignore for now
+  
+  
   //Powerup Calculations
   //Shifts the queue (to be used after the powerup timer reaches 0)
   public void rotateQueue() { //shifts the queue
@@ -221,9 +244,6 @@ class Field {
     }
     return -1;
   }
-
-
-
 
 
   //Score Calculators
@@ -287,4 +307,6 @@ class Field {
     sum[1] = initSum[2] + initSum[3];
     return sum;
   }
+  
+  
 }

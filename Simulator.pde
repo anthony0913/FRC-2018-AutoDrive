@@ -11,6 +11,11 @@ DOWN  moves backwards
 LEFT  rotates counterclockwise
 RIGHT rotates clockwise
 CTRL  stops movement
+
+
+Procedures:
+Draws objects, checks for collisions, then moves players
+
 */
 
 
@@ -69,12 +74,20 @@ void draw(){
   }
   noFill();
   
+  
   //User controls for redA
   if (keyLeft) field.players[0].turnLeft();
   if (keyRight) field.players[0].turnRight();
   if (keyForward) field.players[0].changeMoving(1);
   if (keyBackward) field.players[0].changeMoving(-1);
   if (keyStop) field.players[0].changeMoving(0);
+  
+  
+  
+  
+  
+  field.calcBoxes();
+  
   
   //Collision Logic - checks if bot can move forward
   field.checkCollision();
