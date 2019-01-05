@@ -3,6 +3,7 @@ class Field{
   private int[] grid;
   private final int HEIGHT=534,WIDTH=1060;
   private Boxes[] boxes = new Boxes[24];
+  private String[] scoreSides;
   
   private int[] scoreboard, powerups, queue, boxCount; //left is red, r is blue||
   private String[] states; //left switch, scale, right switch
@@ -21,46 +22,73 @@ class Field{
     queue = new int[6];//1 for currently active powerup, assign sequential numbers afteward
     
     //Creating Players
-    this.players[0] = new Bot(0,99,46,"red");
-    this.players[1] = new Bot(0,244,46,"red");
-    this.players[2] = new Bot(0,389,46,"red");
-    this.players[3] = new Bot(1014,99,46,"blue");
-    this.players[4] = new Bot(1014,244,46,"blue");
-    this.players[5] = new Bot(1014,389,46,"blue");
+    this.players[0] = new Bot(1,99,46,"red");
+    this.players[1] = new Bot(1,244,46,"red");
+    this.players[2] = new Bot(1,389,46,"red");
+    this.players[3] = new Bot(1012+46   -   100,99+46,46,"blue");
+    this.players[4] = new Bot(1012+46,244+46,46,"blue");
+    this.players[5] = new Bot(1012+46,389+46,46,"blue");
     
     
-    
+    //
     
     
     //Create Grid
     /*
     0 = empty field
-    1 = obstacles (switch bridge, scale bridge)
+    1 = obstacles (switch bridge, scale bridge, switch walls, scale walls, arena walls)
     2 = l-switch r
     3 = l-switch b
     4 = scale r
     5 = scale b
     6 = r-switch r
     7 = r-switch b
-    8 = box
-    9 = player
-    10 = red platform
-    11 = blue platform
+    8 = box free
+    9 =  box static x
+    10 = box static y
+    11 = box static
+    12 = player
+    13 = red platform
+    14 = blue platform
     */
+    //Field
     grid = new int[WIDTH*HEIGHT];
     for (int i=0;i<WIDTH*HEIGHT;i++){
       grid[i]=0;
     }
+    
+    
+    
     //Platforms
-    for (int i=156;i<156+222;i++){
-      for (int j=426;j<426+104;j++){
+    for (int i=156;i<=156+222;i++){//red platform
+      for (int j=426;j<=426+104;j++){
         grid[i*WIDTH + j] = 10;}
     }
-    for (int i=156;i<156+222;i++){
-      for (int j=530;j<530+104;j++){
+    for (int i=156;i<=156+222;i++){//blue platform
+      for (int j=530;j<=530+104;j++){
+        grid[i*WIDTH + j] = 11;}
+    }//Change all of these to long rectangles that stretch horizontally and use integer collisions, draw values from grid
+    
+    
+    //Borders
+    for(int i=0;i<WIDTH;i++){//Horizontal borders
+      grid[i] = 1;
+      grid[(HEIGHT-1)*WIDTH + i] = 1;
+    }
+    for(int i=0;i<HEIGHT;i++){//Vertical Borders
+      grid[WIDTH*i] = 1;
+      grid[(WIDTH-1)+WIDTH*i] = 1;
+    }
+    
+    
+    //Left Switch
+    for (int i=156;i<=156+222;i++){
+      for (int j=530;j<=530+104;j++){
         grid[i*WIDTH + j] = 11;}
     }
-    //Left Switch
+    
+    
+    
     
     //Right Switch
     
@@ -95,6 +123,9 @@ class Field{
     boxes[23] = new Boxes(872,257,false);
   }
   
+  
+  
+  
   //fetch statistics
   public int getTimer(){
     return scoreboard[2];
@@ -106,6 +137,34 @@ class Field{
     return powerupTimer;
   }
   
+  
+  
+  //Utility
+  public int convertCoordinates(Bot player){//converts Bot position of x and y into an index for grid
+    int coordinates=0;
+    for (int i=0;i<(int)player.getPosY();i++){
+      coordinates+=WIDTH;
+    }
+    for (int i=0;i<(int)player.getPosX()-1;i++){
+      coordinates+=1;
+    }
+    return coordinates;
+  }
+  
+  
+  
+  public void checkCollision(){    
+    for (int i=0;i<6;i++){
+      //Front collisions
+      int markerIndex = this.convertCoordinates(players[i]);
+      int size = players[i].getSize();
+      float direction = players[i].getDir();
+      for(int j=1;j<=100;j++){
+        if(grid[(int)(markerIndex - sin(direction-radians(26.565)) * size + cos(direction - radians(26.565))) + j] != 0) players[i].changeMobility(0,false);
+        else {players[i].changeMobility(0,true);}      
+      }
+    }
+  }
   
   
   
