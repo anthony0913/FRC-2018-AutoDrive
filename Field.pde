@@ -52,6 +52,8 @@ class Field {
      14 = blue platform
      */
     //Field
+    
+    
     grid = new int[HEIGHT][WIDTH];
     for (int i=0; i<HEIGHT; i++) {
       for (int j=0; j<WIDTH; j++) {
@@ -62,21 +64,56 @@ class Field {
 
 
     //Platforms
+    for (int i=156;i<534-156;i++){ //red plat
+      for(int j=426;j<530;j++){
+        grid[i][j] = 13;
+      }
+    }
+    for (int i=156;i<534-156;i++){ //blue plat
+      for(int j=530;j<530+104;j++){
+        grid[i][j] = 14;
+      }
+    }
     
-
+    
 
     //Left Switch
-    
+    for (int i=;i<;i++){
+      for(int j=;j<;j++){
+        grid[i][j] = 
+      }
+    }
 
     //Borders
-    
+    for (int i=;i<;i++){
+      for(int j=;j<;j++){
+        grid[i][j] = 
+      }
+    }
 
 
     //Left Switch
-    
+    for (int i=;i<;i++){
+      for(int j=;j<;j++){
+        grid[i][j] = 
+      }
+    }
     //Right Switch
-
+    for (int i=;i<;i++){
+      for(int j=;j<;j++){
+        grid[i][j] = 
+      }
+    }
     //Scale
+    for (int i=;i<;i++){
+      for(int j=;j<;j++){
+        grid[i][j] = 
+      }
+    }
+
+
+
+
 
 
     //Boxes (coordinate of top left corner)
@@ -136,10 +173,16 @@ class Field {
   }
 
 
-//x = (rad(5)/2) * l * cos(θ-θ')        y = (rad(5)/2) * l * sin(θ-θ')
+//x = (rad(5)/2) * l * cos(θ-26.565)        y = (rad(5)/2) * l * sin(θ-26.565)
   public void checkCollision() {    
     for (int i=0; i<6; i++) {//runs through each player
       //Front collisions
+      int markerIndex = this.convertCoordinates(players[i]);
+      int size = players[i].getSize();
+      float direction = players[i].getDir();
+      for (int j=0;j<10;j++){ //10 block collision check
+        if( (grid[]) && () )
+      }
     }
   }
 
